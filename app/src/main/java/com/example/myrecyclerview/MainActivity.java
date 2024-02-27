@@ -27,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
         RvAdapter adapter = new RvAdapter(this, numbers, new OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                // 여기에 클릭 시 실행할 로직 추가
                 TextView tvChecked = findViewById(R.id.tvChecked);
                 tvChecked.setText("체크된 항목 : " + (position + 1));
             }
