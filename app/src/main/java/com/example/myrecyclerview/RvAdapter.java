@@ -42,25 +42,33 @@ public class RvAdapter extends RecyclerView.Adapter<RvAdapter.MyViewHolder>{
     @Override
     public void onBindViewHolder(@NonNull RvAdapter.MyViewHolder holder, int position) {
         holder.numText.setText(String.valueOf(numbers.get(position)));
-
-        // 선택된 항목에 따라 CardView의 배경색을 변경합니다.
         holder.cardView.setCardBackgroundColor(selectedPosition == position ? Color.LTGRAY : Color.WHITE);
 
         holder.itemView.setOnClickListener(v -> {
             // 현재 아이템의 위치를 동적으로 조회
             int currentPosition = holder.getBindingAdapterPosition();
 
-            if (currentPosition != RecyclerView.NO_POSITION) {
-                if (selectedPosition == currentPosition) {
-                    // 같은 아이템을 다시 클릭했을 경우 선택 해제
+            if (currentPosition != RecyclerView.NO_POSITION){
+                int previousPosition = selectedPosition;
+                if (selectedPosition == currentPosition){
+                    // 같은 항목 눌렀을때
                     selectedPosition = RecyclerView.NO_POSITION;
-                } else {
-                    // 새로운 아이템을 선택
+                }else{
+                    // 새로운 항목 선택
                     selectedPosition = currentPosition;
                 }
-                notifyDataSetChanged(); // 전체 데이터셋이 변경되었다고 알립니다. 개별 아이템 변경으로 최적화 가능
+
+                // 뷰 업데이트
+                if (previousPosition != RecyclerView.NO_POSITION){
+                    notifyItemChanged(previousPosition);
+                }
+                if (selectedPosition != RecyclerView.NO_POSITION){
+                    notifyItemChanged(selectedPosition);
+                }
                 listener.onItemClick(currentPosition);
+
             }
+
         });
     }
 
