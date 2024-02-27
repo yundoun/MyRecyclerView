@@ -1,6 +1,7 @@
 package com.example.myrecyclerview;
 
-import android.annotation.SuppressLint;
+import androidx.recyclerview.widget.RecyclerView.ViewHolder;
+
 import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -10,7 +11,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -48,7 +48,7 @@ public class RvAdapter extends RecyclerView.Adapter<RvAdapter.MyViewHolder>{
 
         holder.itemView.setOnClickListener(v -> {
             // 현재 아이템의 위치를 동적으로 조회
-            int currentPosition = holder.getAdapterPosition();
+            int currentPosition = holder.getBindingAdapterPosition();
 
             if (currentPosition != RecyclerView.NO_POSITION) {
                 if (selectedPosition == currentPosition) {
