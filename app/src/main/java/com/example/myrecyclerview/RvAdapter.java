@@ -60,10 +60,10 @@ public class RvAdapter extends RecyclerView.Adapter<RvAdapter.MyViewHolder>{
 
                 // 뷰 업데이트
                 if (previousPosition != RecyclerView.NO_POSITION){
-                    notifyItemChanged(previousPosition);
+                    notifyItemChanged(previousPosition); // 이전 선택 해제된 항목 업데이트
                 }
                 if (selectedPosition != RecyclerView.NO_POSITION){
-                    notifyItemChanged(selectedPosition);
+                    notifyItemChanged(selectedPosition); // 새로 선택된 항목 업데이트
                 }
                 listener.onItemClick(currentPosition);
 

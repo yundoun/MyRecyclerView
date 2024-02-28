@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         RecyclerView recyclerView = findViewById(R.id.myRecyclerView);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         List<Integer> numbers = new ArrayList<>();
         for (int i = 1; i <= 500; i++) {
             numbers.add(i);
