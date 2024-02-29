@@ -22,8 +22,12 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        setRecyclerView();
 
-        RvAdapter adapter = new RvAdapter(this, new OnItemClickListener() {
+    }
+
+    private void setRecyclerView (){
+        RvAdapter adapter = new RvAdapter(new OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
                 String text = position == -1 ? "" : "체크된 항목 : " + (position + 1);
@@ -34,11 +38,17 @@ public class MainActivity extends AppCompatActivity {
         binding.myRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         binding.myRecyclerView.setAdapter(adapter);
 
+        List<Integer> numbers;
+        numbers = integerList();
+        adapter.submitList(numbers);
+    }
+
+    private List<Integer> integerList(){
         List<Integer> numbers = new ArrayList<>();
 
         for (int i = 1; i <= 500; i++) {
             numbers.add(i);
         }
-        adapter.submitList(numbers);
+        return numbers;
     }
 }
