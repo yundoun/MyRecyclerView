@@ -15,6 +15,8 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myrecyclerview.databinding.RowBinding;
+
 import java.util.List;
 
 public class RvAdapter extends ListAdapter<Integer, RvAdapter.MyViewHolder> {
@@ -23,7 +25,6 @@ public class RvAdapter extends ListAdapter<Integer, RvAdapter.MyViewHolder> {
     private OnItemClickListener listener;
     private int selectedPosition = RecyclerView.NO_POSITION;
     // 초기에는 선택된 항목이 없으므로 RecyclerView.NO_POSITION 사용
-
 
     public RvAdapter(Context context, OnItemClickListener listener) {
         super(DIFF_CALLBACK);
@@ -48,17 +49,15 @@ public class RvAdapter extends ListAdapter<Integer, RvAdapter.MyViewHolder> {
     @NonNull
     @Override
     public RvAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.row, parent, false);
-
-        return new RvAdapter.MyViewHolder(view);
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        RowBinding binding = RowBinding.inflate(inflater, parent, false);
+        return new RvAdapter.MyViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RvAdapter.MyViewHolder holder, int position) {
-        Integer number = getItem(position);
-        holder.numText.setText(String.valueOf(number));
-        holder.cardView.setCardBackgroundColor(selectedPosition == position ? Color.LTGRAY : Color.WHITE);
+        boolean isSelected = selectedPosition == position;
+        holder.bind(getItem(position), isSelected);
 
         holder.itemView.setOnClickListener(v -> {
             // 현재 아이템의 위치를 동적으로 조회
@@ -66,24 +65,32 @@ public class RvAdapter extends ListAdapter<Integer, RvAdapter.MyViewHolder> {
 
             if (currentPosition != RecyclerView.NO_POSITION){
                 notifyItemChanged(selectedPosition); // 이전 선택 해제
-                selectedPosition = currentPosition == selectedPosition ? RecyclerView.NO_POSITION : currentPosition;
-                notifyItemChanged(selectedPosition); // 새로운 선택
-                listener.onItemClick(currentPosition);
+                // 배경색 변경하기 위한 아이템의 변경 알림
+                if (selectedPosition == currentPosition){
+                    selectedPosition = RecyclerView.NO_POSITION;
+                    listener.onItemClick(-1);
+                }else{
+                    selectedPosition = currentPosition;
+                    notifyItemChanged(selectedPosition);
+                    listener.onItemClick(currentPosition);
+                }
             }
 
         });
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
+        private RowBinding binding;
 
-        TextView numText;
-        CardView cardView;
-
-        public MyViewHolder(@NonNull View itemView) {
-            super(itemView);
-
-            numText = itemView.findViewById(R.id.numText);
-            cardView =  itemView.findViewById(R.id.cardView);
+        public MyViewHolder(RowBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
+
+        public void bind(Integer number, boolean isSelected){
+            binding.numText.setText(String.valueOf(number));
+            binding.cardView.setCardBackgroundColor(isSelected ? Color.LTGRAY : Color.WHITE);
+        }
+
     }
 }

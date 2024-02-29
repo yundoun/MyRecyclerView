@@ -1,3 +1,5 @@
+import com.android.build.api.dsl.ViewBinding
+
 plugins {
     id("com.android.application")
 }
@@ -5,6 +7,8 @@ plugins {
 android {
     namespace = "com.example.myrecyclerview"
     compileSdk = 34
+
+
 
     defaultConfig {
         applicationId = "com.example.myrecyclerview"
@@ -28,6 +32,10 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    buildFeatures {
+        viewBinding = true
     }
 }
 

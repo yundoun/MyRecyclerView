@@ -7,32 +7,36 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myrecyclerview.databinding.ActivityMainBinding;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private ActivityMainBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        RecyclerView recyclerView = findViewById(R.id.myRecyclerView);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
 
         RvAdapter adapter = new RvAdapter(this, new OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                TextView tvChecked = findViewById(R.id.tvChecked);
-                tvChecked.setText("체크된 항목 : " + (position + 1));
+                String text = position == -1 ? "" : "체크된 항목 : " + (position + 1);
+                binding.tvChecked.setText(text);
             }
         });
 
-        recyclerView.setAdapter(adapter);
+        binding.myRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+        binding.myRecyclerView.setAdapter(adapter);
 
         List<Integer> numbers = new ArrayList<>();
 
-        for(int i=1; i<=500; i++){
+        for (int i = 1; i <= 500; i++) {
             numbers.add(i);
         }
         adapter.submitList(numbers);
