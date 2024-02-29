@@ -1,5 +1,7 @@
 package com.example.myrecyclerview;
 
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 
 import android.content.Context;
@@ -15,20 +17,33 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class RvAdapter extends RecyclerView.Adapter<RvAdapter.MyViewHolder>{
+public class RvAdapter extends ListAdapter<Integer, RvAdapter.MyViewHolder> {
 
-    private List<Integer> numbers;
     private Context context;
     private OnItemClickListener listener;
-    private int selectedPosition = RecyclerView.NO_POSITION; // 초기에는 선택된 항목이 없으므로 RecyclerView.NO_POSITION 사용
+    private int selectedPosition = RecyclerView.NO_POSITION;
+    // 초기에는 선택된 항목이 없으므로 RecyclerView.NO_POSITION 사용
 
 
-    public RvAdapter(Context context, List<Integer> numbers, OnItemClickListener listener) {
+    public RvAdapter(Context context, OnItemClickListener listener) {
+        super(DIFF_CALLBACK);
         this.context = context;
-        this.numbers = numbers;
         this.listener = listener;
     }
 
+    private static final DiffUtil.ItemCallback<Integer> DIFF_CALLBACK = new DiffUtil.ItemCallback<Integer>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull Integer oldItem, @NonNull Integer newItem) {
+            // 같은 아이템인지 확인
+            return oldItem.equals(newItem);
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull Integer oldItem, @NonNull Integer newItem) {
+            // 아이템의 내용이 같은지 확인
+            return oldItem.equals(newItem);
+        }
+    };
 
     @NonNull
     @Override
@@ -41,7 +56,8 @@ public class RvAdapter extends RecyclerView.Adapter<RvAdapter.MyViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull RvAdapter.MyViewHolder holder, int position) {
-        holder.numText.setText(String.valueOf(numbers.get(position)));
+        Integer number = getItem(position);
+        holder.numText.setText(String.valueOf(number));
         holder.cardView.setCardBackgroundColor(selectedPosition == position ? Color.LTGRAY : Color.WHITE);
 
         holder.itemView.setOnClickListener(v -> {
@@ -49,33 +65,13 @@ public class RvAdapter extends RecyclerView.Adapter<RvAdapter.MyViewHolder>{
             int currentPosition = holder.getBindingAdapterPosition();
 
             if (currentPosition != RecyclerView.NO_POSITION){
-                int previousPosition = selectedPosition;
-                if (selectedPosition == currentPosition){
-                    // 같은 항목 눌렀을때
-                    selectedPosition = RecyclerView.NO_POSITION;
-                }else{
-                    // 새로운 항목 선택
-                    selectedPosition = currentPosition;
-                }
-
-                // 뷰 업데이트
-                if (previousPosition != RecyclerView.NO_POSITION){
-                    notifyItemChanged(previousPosition); // 이전 선택 해제된 항목 업데이트
-                }
-                if (selectedPosition != RecyclerView.NO_POSITION){
-                    notifyItemChanged(selectedPosition); // 새로 선택된 항목 업데이트
-                }
+                notifyItemChanged(selectedPosition); // 이전 선택 해제
+                selectedPosition = currentPosition == selectedPosition ? RecyclerView.NO_POSITION : currentPosition;
+                notifyItemChanged(selectedPosition); // 새로운 선택
                 listener.onItemClick(currentPosition);
-
             }
 
         });
-    }
-
-
-    @Override
-    public int getItemCount() {
-        return numbers.size();
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{

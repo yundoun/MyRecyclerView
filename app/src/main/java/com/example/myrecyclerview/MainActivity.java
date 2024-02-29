@@ -19,12 +19,8 @@ public class MainActivity extends AppCompatActivity {
 
         RecyclerView recyclerView = findViewById(R.id.myRecyclerView);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
-        List<Integer> numbers = new ArrayList<>();
-        for (int i = 1; i <= 500; i++) {
-            numbers.add(i);
-        }
 
-        RvAdapter adapter = new RvAdapter(this, numbers, new OnItemClickListener() {
+        RvAdapter adapter = new RvAdapter(this, new OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
                 TextView tvChecked = findViewById(R.id.tvChecked);
@@ -34,5 +30,11 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView.setAdapter(adapter);
 
+        List<Integer> numbers = new ArrayList<>();
+
+        for(int i=1; i<=500; i++){
+            numbers.add(i);
+        }
+        adapter.submitList(numbers);
     }
 }
