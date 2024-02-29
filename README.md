@@ -40,7 +40,4 @@ RvAdapter에 인터페이스를 직접 상속받아 구현하는 방식 대신
 익명 클래스를 사용하여 인터페이스를 구현하였다.  
 이것은 결합도를 낮추고 재사용성과 유지보수성을 향상시킨다.
 
-
-
-![movie](https://github.com/yundoun/MyRecyclerView/assets/106233376/688ad767-7e44-45ce-b9e9-fc8ead6626f6)
-
+<img src="image/RecyclerView.gif" >
