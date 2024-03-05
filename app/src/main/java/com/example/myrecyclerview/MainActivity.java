@@ -26,13 +26,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setRecyclerView (){
-        RvAdapter adapter = new RvAdapter(new OnItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                String text = position == -1 ? "" : "체크된 항목 : " + (position + 1);
-                binding.tvChecked.setText(text);
-            }
+    private void setRecyclerView() {
+        RvAdapter adapter = new RvAdapter(position -> {
+            String text = position == -1 ? "" : "체크된 항목 : " + (position + 1);
+            binding.tvChecked.setText(text);
         });
 
         binding.myRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
@@ -43,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         adapter.submitList(numbers);
     }
 
-    private List<Integer> integerList(){
+    private List<Integer> integerList() {
         List<Integer> numbers = new ArrayList<>();
 
         for (int i = 1; i <= 500; i++) {
